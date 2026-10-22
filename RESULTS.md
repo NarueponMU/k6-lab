@@ -11,7 +11,7 @@
 
 - Step 0.7, rules that passed, p(95), p(99), exit code after your change: All rules passed: p(95)<1000 (p(95)=410.28ms), p(99)<1500 (p(99)=420.69ms), http_req_failed rate<0.01 (0.00%), exit code 0. After changing p(95)<1000 to p(95)<300, the p(95) rule failed (p(95)=427.81ms) and the exit code was 99.
 
-- Step 0.8, what was wrong, and how the checks showed it:
+- Step 0.8, what was wrong, and how the checks showed it: The request excluded 'pepperoni' and 'knife' in lowercase, but the API names are 'Pepperoni' and 'Knife' (seen with explore.js), so the API excluded nothing and returned random pizzas. Under 5 VUs for 20s, 'no pepperoni' failed 3/75 (96% passed) and 'no knife needed' failed 27/75 (64% passed), while status was always 200. One manual request would probably return a pizza that looks correct, but 75 checked requests showed the wrong answers as a failure rate. After changing the names to 'Pepperoni' and 'Knife', every check passed.
 
 ## Part A results
 | Step | Test type    | Users | Req/s | p(95) | Max | Failed | Checks |
